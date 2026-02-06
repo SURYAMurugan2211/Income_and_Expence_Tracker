@@ -1,27 +1,10 @@
 {
   "version": 2,
-  "name": "money-manager-frontend",
-  "builds": [
-    {
-      "src": "money-manager-frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "build"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
-  ],
+  "buildCommand": "npm run build",
+  "outputDirectory": "build",
+  "installCommand": "npm install",
+  "framework": "create-react-app",
   "env": {
     "CI": "false"
-  },
-  "buildCommand": "cd money-manager-frontend && npm install && npm run build"
+  }
 }
