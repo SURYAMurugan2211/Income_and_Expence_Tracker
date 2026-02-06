@@ -1,0 +1,495 @@
+{
+  "info": {
+    "name": "Money Manager API",
+    "description": "Complete API collection for Money Manager Backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('token', jsonData.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.collectionVariables.set('token', jsonData.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "me"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Transactions",
+      "item": [
+        {
+          "name": "Get All Transactions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/transactions",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions"]
+            }
+          }
+        },
+        {
+          "name": "Get Transactions with Filters",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/transactions?type=expense&startDate=2024-01-01&endDate=2024-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "expense"
+                },
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-12-31"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Transaction",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"expense\",\n  \"amount\": 50.00,\n  \"category\": \"Food & Dining\",\n  \"division\": \"personal\",\n  \"description\": \"Lunch at restaurant\",\n  \"date\": \"2024-02-06\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/transactions",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions"]
+            }
+          }
+        },
+        {
+          "name": "Update Transaction",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 60.00,\n  \"description\": \"Updated lunch expense\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/transactions/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "TRANSACTION_ID"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Transaction",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/transactions/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "TRANSACTION_ID"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories"]
+            }
+          }
+        },
+        {
+          "name": "Get Categories by Type",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories?type=expense",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "expense"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Custom Category\",\n  \"type\": \"expense\",\n  \"icon\": \"🎯\",\n  \"color\": \"#3b82f6\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Accounts",
+      "item": [
+        {
+          "name": "Get All Accounts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/accounts",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts"]
+            }
+          }
+        },
+        {
+          "name": "Create Account",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Main Checking\",\n  \"balance\": 5000.00,\n  \"type\": \"bank\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/accounts",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts"]
+            }
+          }
+        },
+        {
+          "name": "Transfer Between Accounts",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fromAccount\": \"ACCOUNT_ID_1\",\n  \"toAccount\": \"ACCOUNT_ID_2\",\n  \"amount\": 500.00,\n  \"description\": \"Monthly savings\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/accounts/transfer",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "transfer"]
+            }
+          }
+        },
+        {
+          "name": "Get Transfer History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/transfers",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "transfers"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Analytics",
+      "item": [
+        {
+          "name": "Get Monthly Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/analytics/summary?period=month",
+              "host": ["{{baseUrl}}"],
+              "path": ["analytics", "summary"],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "month"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Category Breakdown",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/analytics/category-breakdown?type=expense",
+              "host": ["{{baseUrl}}"],
+              "path": ["analytics", "category-breakdown"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "expense"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Weekly Analytics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/analytics/weekly",
+              "host": ["{{baseUrl}}"],
+              "path": ["analytics", "weekly"]
+            }
+          }
+        },
+        {
+          "name": "Get Yearly Analytics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/analytics/yearly?year=2024",
+              "host": ["{{baseUrl}}"],
+              "path": ["analytics", "yearly"],
+              "query": [
+                {
+                  "key": "year",
+                  "value": "2024"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      }
+    }
+  ]
+}
